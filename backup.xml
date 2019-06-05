@@ -1,0 +1,1868 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<survey 
+  alt="22363235 SG MD Lottery Keno Concept Test ORD-399140-P0S9"
+  autoRecover="1"
+  autosaveKey="rnid,psid"
+  browserDupes="safe"
+  builder:wizardCompleted="1"
+  builderCompatible="1"
+  capturePreciseTime="1"
+  compat="141"
+  displayOnError="all"
+  extraVariables="source,record,ipAddress,decLang,list,userAgent,settings,jumpto"
+  fir="on"
+  html:showNumber="0"
+  markerTimeout="0"
+  mobile="compat"
+  mobileDevices="smartphone,tablet,desktop"
+  name="Survey"
+  remerged="20181206_12:23"
+  secure="1"
+  setup="term,decLang,quota,time"
+  spssSimpleCheckbox="1"
+  ss:disableBackButton="1"
+  ss:enableNavigation="1"
+  ss:hideProgressBar="0"
+  ss:includeJS="/survey/selfserve/rnstarlib/res/rnjslib.js?imgsecurity=standard"
+  ss:showBackButton="0"
+  state="testing"
+  theme="frozen:company/theme_vop"
+  trackVars="checkbox"
+  version="5">
+
+<suspend/>
+
+<exec when="init">
+#D-STAR V4.1
+#DK settings, set basic and high security keys
+#these keys should be changed for every project, please ask your PMs to provide you valid keys for your project
+def getDkSecStr():
+  try:
+    basicKey = 63889 
+    highKey = 57863 
+    if  basicKey and highKey:
+      return "&amp;high=" + str(basicKey * int(pid) - highKey)
+    elif basicKey:
+      return "&amp;basic=" + str(basicKey)
+    else: return ""
+  except:
+    return ""
+</exec>
+
+<exec>
+rnentryurl.val = getFullPath(gv)
+p.rnPanelName = rnGetPanelName(src)
+if p.rnPanelName!='': gv.survey.root.styles.ss.logoFile = 'selfserve/rnstarlib/logos/' + p.rnPanelName + '_logo.png'
+</exec>
+
+<text 
+  label="rnentryurl"
+  cond="False"
+  size="200"
+  translateable="0"
+  where="execute,survey,notdp">
+  <title>Hidden- to store survey entry url</title>
+</text>
+
+<samplesources default="0">
+  <samplesource keyring="sys/rn" list="1" sign="out">
+    <title>Research Now (STS UR)</title>
+    <invalid>The unique number that tracks your progress through this survey is missing. To resume, please click the original link in the email we sent you.</invalid>
+    <completed>It seems you have already entered this survey.</completed>
+    <var name="stsd1"/>
+    <var name="stsd2"/>
+    <var name="stsd3"/>
+    <var name="stsd4"/>
+    <var name="stsd5"/>
+    <var name="stsd6"/>
+    <var name="stsd7"/>
+    <var name="rnid" unique="1"/>
+    <var name="study" required="1"/>
+    <var name="c"/>
+    <var name="src"/>
+    <exit cond="terminated and (hasMarker('speederAutoCheck') or hasMarker('speederAuto') or hasMarker('slowpokeAuto') or hasMarker('straightlinerAuto') or hasMarker('badopenAuto') or hasMarker('failedAuto'))" url="http://endlinks.researchnow.com/d/?status=4&amp;rnid=${rnid}&amp;study=${study}"/>
+    <exit cond="terminated" url="http://endlinks.researchnow.com/d/?status=2&amp;rnid=${rnid}&amp;study=${study}"/>
+    <exit cond="overquota" url="http://endlinks.researchnow.com/d/?status=3&amp;rnid=${rnid}&amp;study=${study}"/>
+    <exit cond="qualified" url="http://endlinks.researchnow.com/d/?status=1&amp;rnid=${rnid}&amp;study=${study}"/>
+  </samplesource>
+
+  <samplesource list="0">
+    <title>Open Survey</title>
+    <invalid>You are missing information in the URL. Please verify the URL with the original invite.</invalid>
+    <completed>It seems you have already entered this survey.</completed>
+    <exit cond="terminated">Thank you for taking our survey.</exit>
+    <exit cond="qualified">Thank you for taking our survey. Your efforts are greatly appreciated!</exit>
+    <exit cond="overquota">Thank you for taking our survey.</exit>
+  </samplesource>
+
+  <samplesource list="2">
+    <title>DK</title>
+    <invalid>The unique number that tracks your progress through this survey is missing. To resume, please click the original link in the email we sent you.</invalid>
+    <completed>It seems you have already entered this survey.</completed>
+    <var name="pid" required="1"/>
+    <var name="psid" unique="1"/>
+    <var name="sp"/>
+    <var name="pp"/>
+    <var name="sc"/>
+    <var name="ppid"/>
+    <exit cond="terminated and (hasMarker('speederAutoCheck') or hasMarker('speederAuto') )" url="//dkr1.ssisurveys.com/projects/end?rst=2&amp;psid=${psid}&amp;qflag=1"/>
+    <exit cond="terminated" url="//dkr1.ssisurveys.com/projects/end?rst=2&amp;psid=${psid}${'&amp;qflag=5' if hasMarker('lateScreenOut')  else ''}"/>
+    <exit cond="overquota" url="//dkr1.ssisurveys.com/projects/end?rst=3&amp;psid=${psid}${'&amp;qflag=6' if hasMarker('lateQuotaFull')  else ''}"/>
+    <exit cond="qualified" url="//dkr1.ssisurveys.com/projects/end?rst=1&amp;psid=${psid}${getDkSecStr()}${'&amp;compflag=2' if hasMarker('shortComplete') else '&amp;compflag=3' if hasMarker('longComplete')  else ''}"/>
+  </samplesource>
+</samplesources>
+
+<themes>
+  <theme cond="p.rnPanelName == 'vop'" name="frozen:company/theme_vop"/>
+  <theme cond="p.rnPanelName == 'er'" name="frozen:company/theme_er"/>
+  <theme cond="p.rnPanelName == 'mmr'" name="frozen:company/theme_mmr"/>
+  <theme cond="list == '2'" name="frozen:company/theme_dk"/></themes>
+<style cond="1" name="respview.client.css"><![CDATA[
+<style type="text/css">
+    .autosave-restart { display: none; }
+    .grid.grid-table-mode .col-legend { vertical-align: bottom; }
+    .instruction-text { font-size: 1.5rem !important;}
+</style>
+]]></style>
+<block label="blkSurveySettings" builder:title="Survey Settings">
+  <note>Survey Defaults - need to be enabled on all projects</note>
+  <exec>
+try:
+  panelSource.val = panelSource.attr('r%s' % src).index    
+except Exception:
+  panelSource.val = panelSource.r99.index
+  
+try:
+  Country.val = Country.attr('r%s' % c).index
+except Exception:
+  pass
+
+#DK variables
+try:
+  xsubPanel.val = xsubPanel.attr('r%s' % sp).index
+except Exception:
+  pass
+  
+try:
+  xpanelPartner.val = xpanelPartner.attr('r%s' % pp).index
+except Exception:
+  pass
+  </exec>
+
+  <radio 
+   label="panelSource"
+   cond="tplShow()"
+   multicol:count="5"
+   optional="1"
+   randomize="0"
+   translateable="0"
+   uses="multicol.7"
+   where="execute,survey,notdp">
+    <title>Identifies which panel the respondent belongs to</title>
+    <row label="r1" value="1">VOP UK (United Kingdom)</row>
+    <row label="r2" value="2">VOP FR (France)</row>
+    <row label="r3" value="3">VOP IT (Italy)</row>
+    <row label="r4" value="4">VOP DE (Germany)</row>
+    <row label="r5" value="5">VOP ES (Spain)</row>
+    <row label="r6" value="6">VOP AU (Australia)</row>
+    <row label="r7" value="7">VOP AT (Austria)</row>
+    <row label="r8" value="8">VOP NO (Norway)</row>
+    <row label="r9" value="9">VOP PL (Poland)</row>
+    <row label="r10" value="10">VOP RU (Russia)</row>
+    <row label="r11" value="11">VOP IE (Ireland)</row>
+    <row label="r12" value="12">VOP CH (Switzerland) - German</row>
+    <row label="r13" value="13">VOP DK (Denmark)</row>
+    <row label="r14" value="14">VOP FI (Finland)</row>
+    <row label="r15" value="15">VOP SE (Sweden)</row>
+    <row label="r16" value="16">VOP NL (Netherlands)</row>
+    <row label="r17" value="17">VOP GR (Greece)</row>
+    <row label="r18" value="18">VOP BE (Belgium) - Dutch</row>
+    <row label="r19" value="19">VOP CZ (Czech Rep)</row>
+    <row label="r20" value="20">VOP PT (Portugal)</row>
+    <row label="r21" value="21">VOP HU (Hungary)</row>
+    <row label="r22" value="22">VOP USA (United States) - English</row>
+    <row label="r23" value="23">VOP BR (Brazil)</row>
+    <row label="r24" value="24">VOP USA (United States) - Spanish</row>
+    <row label="r25" value="25">VOP BE (Belgium) - French</row>
+    <row label="r26" value="26">VOP CH (Switzerland) - French</row>
+    <row label="r27" value="27">VOP CH (Switzerland) - Italian</row>
+    <row label="r28" value="28">VOP CH (Switzerland) - English</row>
+    <row label="r29" value="29">VOP NZ (New Zealand) - English</row>
+    <row label="r30" value="30">VOP ME (Mexico)</row>
+    <row label="r31" value="31">VOP IN (India)</row>
+    <row label="r32" value="32">VOP CN (China)</row>
+    <row label="r33" value="33">VOP SING (Simplified Chinese)</row>
+    <row label="r34" value="34">VOP CHIL</row>
+    <row label="r35" value="35">VOP SING (English)</row>
+    <row label="r36" value="36">VOP ARG</row>
+    <row label="r37" value="37">VOP CAN (Canada) - English</row>
+    <row label="r38" value="38">VOP CAN (Canada) - French</row>
+    <row label="r39" value="39">VOP JAP (Japan)</row>
+    <row label="r40" value="40">VOP SKOR (South Korea)</row>
+    <row label="r41" value="41">Mum's Opinions</row>
+    <row label="r42" value="42">VOP South Africa</row>
+    <row label="r43" value="43">B2B UK</row>
+    <row label="r44" value="44">Research Now</row>
+    <row label="r45" value="45">VOP HK (Chinese)</row>
+    <row label="r46" value="46">VOP HK (English)</row>
+    <row label="r47" value="47">VOP Taiwan</row>
+    <row label="r48" value="48">VOP Malaysia (Malay)</row>
+    <row label="r49" value="49">VOP Malaysia (English)</row>
+    <row label="r50" value="50">E-Rewards (English)</row>
+    <row label="r51" value="51">E-Rewards (Germany)</row>
+    <row label="r52" value="52">E-Rewards (Spain)</row>
+    <row label="r53" value="53">E-Rewards (France)</row>
+    <row label="r54" value="54">E-Rewards (Netherlands)</row>
+    <row label="r55" value="55">E-Rewards (Portugal)</row>
+    <row label="r56" value="56">E-Rewards MMR</row>
+    <row label="r57" value="57">E-Rewards UTB (English)</row>
+    <row label="r58" value="58">E-Rewards (Canada-French)</row>
+    <row label="r59" value="59">E-Rewards (US-Spanish)</row>
+    <row label="r60" value="60">E-Rewards (Mexico-Spanish)</row>
+    <row label="r61" value="61">Webmiles DE</row>
+    <row label="r62" value="62">Swiss Webmiles DE</row>
+    <row label="r63" value="63">Swiss Webmiles FR</row>
+    <row label="r64" value="64">VOP Indonesia</row>
+    <row label="r65" value="65">VOP Thailand</row>
+    <row label="r66" value="66">VOP Turkey</row>
+    <row label="r67" value="67">E-Miles</row>
+    <row label="r68" value="68">Peanut Labs</row>
+    <row label="r69" value="69">AirMiles</row>
+    <row label="r70" value="70">Lightspeed North America</row>
+    <row label="r71" value="71">Lightspeed Australia</row>
+    <row label="r72" value="72">Lightspeed Europe</row>
+    <row label="r73" value="73">eRewards</row>
+    <row label="r74" value="74">ePocrates</row>
+    <row label="r75" value="75">Leger</row>
+    <row label="r76" value="76">ToLuna</row>
+    <row label="r77" value="77">MedSite</row>
+    <row label="r78" value="78">Ipsos</row>
+    <row label="r79" value="79">Pureprofile</row>
+    <row label="r80" value="80">Ticketekrewards</row>
+    <row label="r81" value="81">veda advantage</row>
+    <row label="r82" value="82">aussie survey</row>
+    <row label="r83" value="83">Ciao</row>
+    <row label="r84" value="84">Greenfield</row>
+    <row label="r85" value="85">Livra</row>
+    <row label="r86" value="86">AIP</row>
+    <row label="r87" value="87">GFK</row>
+    <row label="r88" value="88">CINT</row>
+    <row label="r89" value="89">Livra</row>
+    <row label="r90" value="90">Debrand 1</row>
+    <row label="r91" value="91">Debrand 2</row>
+    <row label="r92" value="92">Debrand 3</row>
+    <row label="r93" value="93">Debrand 4</row>
+    <row label="r94" value="94">Debrand 5</row>
+    <row label="r95" value="95">Debrand 6</row>
+    <row label="r96" value="96">Debrand 7</row>
+    <row label="r97" value="97">Debrand 8</row>
+    <row label="r98" value="98">Debrand 9</row>
+    <row label="r99" value="99">CATCH ALL</row>
+    <row label="r101" value="101">Nectar Canvass</row>
+    <row label="r560" value="560">MMR (EN_UK)</row>
+    <row label="r561" value="561">MMR (EN_CA)</row>
+    <row label="r562" value="562">MMR (FR_CA)</row>
+    <row label="r563" value="563">MMR (DE_DE)</row>
+    <row label="r564" value="564">MMR (FR_FR)</row>
+    <row label="r565" value="565">MMR (IT_IT)</row>
+    <row label="r566" value="566">MMR (ES_ES)</row>
+    <row label="r731" value="731">ERI Nectar</row>
+  </radio>
+
+  <radio 
+   label="Country"
+   cond="tplShow()"
+   multicol:count="5"
+   optional="1"
+   randomize="0"
+   translateable="0"
+   uses="multicol.7"
+   where="execute,survey,report">
+    <title>Country from URL</title>
+    <row label="r1">UK</row>
+    <row label="r2">USA</row>
+    <row label="r3">France</row>
+    <row label="r4">Italy</row>
+    <row label="r5">Germany</row>
+    <row label="r6">Spain</row>
+    <row label="r7">Sweden</row>
+    <row label="r8">Denmark</row>
+    <row label="r9">Norway</row>
+    <row label="r10">Greece</row>
+    <row label="r11">Hungary</row>
+    <row label="r12">Czech Republic</row>
+    <row label="r13">Poland</row>
+    <row label="r14">Russia</row>
+    <row label="r15">South Korea</row>
+    <row label="r16">Thailand</row>
+    <row label="r17">UK (Welsh)</row>
+    <row label="r18">Ireland</row>
+    <row label="r19">Australia</row>
+    <row label="r20">China</row>
+    <row label="r21">Japan</row>
+    <row label="r22">Austria</row>
+    <row label="r23">India</row>
+    <row label="r24">Turkey</row>
+    <row label="r25">UAE</row>
+    <row label="r26">Argentina</row>
+    <row label="r27">Brazil</row>
+    <row label="r28">Venezuela</row>
+    <row label="r29">Columbia</row>
+    <row label="r30">Switzerland</row>
+    <row label="r31">Portugal</row>
+    <row label="r32">Canada</row>
+    <row label="r33">Mexico</row>
+    <row label="r34">Malaysia</row>
+    <row label="r35">South Africa</row>
+    <row label="r36">Tunisia</row>
+    <row label="r37">Belgium</row>
+    <row label="r38">Netherlands</row>
+    <row label="r39">Israel</row>
+    <row label="r40">Saudi Arabia</row>
+    <row label="r41">Finland</row>
+    <row label="r42">New Zealand</row>
+    <row label="r43">Singapore</row>
+    <row label="r44">Chile</row>
+    <row label="r45">Taiwan</row>
+    <row label="r46">Hong Kong</row>
+    <row label="r47">Indonesia</row>
+  </radio>
+
+  <radio 
+   label="xsubPanel"
+   cond="tplShow()"
+   multicol:count="5"
+   optional="1"
+   randomize="0"
+   translateable="0"
+   uses="multicol.7"
+   where="execute,survey,notdp">
+    <title>DK sub panel. Please add the sub pannels that will be used in this survey.</title>
+    <row label="r0" value="0">Respondents without sub panel</row>
+    <row label="r1" value="1">Member of any sub-panel</row>
+  </radio>
+
+  <radio 
+   label="xpanelPartner"
+   cond="tplShow()"
+   multicol:count="5"
+   optional="1"
+   randomize="0"
+   translateable="0"
+   uses="multicol.7"
+   where="execute,survey,notdp">
+    <title>DK panel partner. Please add the panel partners that will be used in this survey.</title>
+    <row label="r0" value="0">No external sample provider used</row>
+    <row label="r1" value="1">SSI (ePanel)</row>
+  </radio>
+
+  <radio 
+   label="dTrack"
+   cond="tplShow()"
+   optional="1"
+   translateable="0"
+   where="execute,survey,report,notdp">
+    <title>dTrack</title>
+    <row label="r0" value="0">No Changes</row>
+    <row label="r1" value="1">Change 1</row>
+    <row label="r2" value="2">Change 2</row>
+    <row label="r3" value="3">Change 3</row>
+    <row label="r4" value="4">Change 4</row>
+    <row label="r5" value="5">Change 5</row>
+    <row label="r6" value="6">Change 6</row>
+    <row label="r7" value="7">Change 7</row>
+    <row label="r8" value="8">Change 8</row>
+    <row label="r9" value="9">Change 9</row>
+    <row label="r10" value="10">Change 10</row>
+    <row label="r11" value="11">Change 11</row>
+  </radio>
+
+  <exec>
+#######################################
+# Update punch and row text for Live Changes
+#######################################
+
+dTrack.val = dTrack.r0.index 
+#dTrack.val = dTrack.r1.index
+p.tmp = ''
+  </exec>
+
+  <suspend/>
+</block>
+
+<quota overquota="noqual" sheet="Overall"/>
+
+<block label="brnjumpto" cond="gv.survey.root.state.testing and jumpto" builder:title="JumpTo - please remove this block when go living">
+  <exec>
+try: rnjumpto.val = rnjumpto.attr(jumpto).index
+except: pass
+try: rnjumpto.val = int(gv.request.get('jumpto0'))
+except: pass
+p.tmp = p.tmp + str(rnjumpto.val) + "; "
+  </exec>
+
+  <select 
+   label="rnjumpto"
+   cond="jumpto =='all' and not gv.request.get('jumpto0')&gt;'0'"
+   optional="1"
+   translateable="0"
+   where="survey,notdp">
+    <title>Please select a question to jump to.</title>
+    <choice label="skip">Skip</choice>
+    <style name="question.after" wrap="ready"><![CDATA[
+var newSelect = $ (".answers select").clone();
+newSelect.attr("name","jumpto0");
+newSelect.attr("id", "jumpto0");
+newSelect.find("option").attr("selected",false).first().remove();
+newSelect.find("option").first().text("Jump to");
+sessionStorage.jumptoSelect = newSelect[0].outerHTML;
+]]></style>
+  </select>
+</block>
+
+<suspend/>
+
+<note>Start = Questionnaire</note>
+<html label="QINTRO" where="survey">Thank you for your interest in participating in our survey!<br />
+<br />
+We are very interested in gathering your thoughts on a variety of topics and new game ideas. This survey will take around 10 minutes to complete and please be assured that your responses will be kept confidential. We truly appreciate your time and honest feedback! <br />
+<br />
+Please click the next button below to continue.</html>
+
+<suspend/>
+
+<number 
+  label="Q1"
+  optional="0"
+  size="3"
+  verify="range(1,100),digits">
+  <title>To make sure that you qualify for our survey, please indicate your age.</title>
+  <style name="question.after" wrap="ready"><![CDATA[
+$ (':text').attr('maxlength','3');
+    $ (':text').attr('size','3');
+]]></style>
+</number>
+
+<suspend/>
+
+<stylevar name="cs:myVar"/>
+<exec>
+for x in Q2.rows:
+  if Q1.check(x.styles.cs.myVar): 
+    Q2.val = x.index
+    break
+</exec>
+
+<radio 
+  label="Q2"
+  optional="1"
+  translateable="0"
+  where="execute,survey,report">
+  <title>Age</title>
+  <row label="r1" cs:myVar="1-17" value="1">Under 18</row>
+  <row label="r2" cs:myVar="18-20" value="2">18 - 20</row>
+  <row label="r3" cs:myVar="21-24" value="3">21 - 24</row>
+  <row label="r4" cs:myVar="25-29" value="4">25 - 29</row>
+  <row label="r5" cs:myVar="30-34" value="5">30 - 34</row>
+  <row label="r6" cs:myVar="35-39" value="6">35 - 39</row>
+  <row label="r7" cs:myVar="40-44" value="7">40 - 44</row>
+  <row label="r8" cs:myVar="45-49" value="8">45 - 49</row>
+  <row label="r9" cs:myVar="50-54" value="9">50 - 54</row>
+  <row label="r10" cs:myVar="55-59" value="10">55 - 59</row>
+  <row label="r11" cs:myVar="60-64" value="11">60 - 64</row>
+  <row label="r12" cs:myVar="65-69" value="12">65 - 69</row>
+  <row label="r13" cs:myVar="70-74" value="13">70 - 74</row>
+  <row label="r14" cs:myVar="74-100" value="14">75+</row>
+</radio>
+
+<suspend/>
+
+<term cond="Q2.r1">TERMINATE Q2 CODE 1</term>
+
+<block label="US_Zipcode_BLOCK" builder:title="US Zipcode" sst="0">
+  <exec when="returning,finished,init">
+zipFile = File("zip.dat", "zip")
+  </exec>
+
+  <text 
+   label="Q3"
+   optional="0"
+   size="5"
+   verify="zipcode">
+    <title>What is your zip code?</title>
+    <style mode="after" name="question.element"><![CDATA[
+<script>
+      $ ("input[name='$(name)']").attr('maxlength','5');
+      $ ("input[name='$(name)']").attr('size','5');</script>
+]]></style>
+  </text>
+
+  <suspend/>
+
+  <exec sst="0">
+p.zipCodeDict = dict(zcode=Q3.val)  
+p.surveyWillTerm = False
+  </exec>
+
+  <logic label="zipCodeAPI" api:params="p.zipCodeDict" api:url="http://speeders.researchnow.com/zipcode/dmalookup.php" uses="api.1"/>
+  <exec sst="0">
+if zipCodeAPI.status == 200:
+  try:
+    p.surveyWillTerm = True
+    for i in range(0, 6):
+      dmaData.cols[i].ZIP_CODE.val = zipCodeAPI.r[i]['ZIP_CODE']
+      dmaData.cols[i].DMA_CODE.val = zipCodeAPI.r[i]['DMA_CODE']
+      dmaData.cols[i].DMA_NAME.val = zipCodeAPI.r[i]['DMA_NAME']
+      dmaData.cols[i].ADDITIONAL_DMA_CODE.val = zipCodeAPI.r[i]['ADDITIONAL_DMA_CODE']
+      dmaData.cols[i].STATE_CODE.val = zipCodeAPI.r[i]['STATE_CODE']
+      dmaData.cols[i].STATE_ABV.val = zipCodeAPI.r[i]['STATE_ABV']
+      dmaData.cols[i].COUNTY_CODE.val = zipCodeAPI.r[i]['CITY_CODE']
+      dmaData.cols[i].COUNTY_NAME.val = zipCodeAPI.r[i]['CITY_NAME']
+      dmaData.cols[i].COUNTY_SIZE.val = zipCodeAPI.r[i]['CITY_SIZE']
+      dmaData.cols[i].NMR_TERR_CODE.val = zipCodeAPI.r[i]['NMR_TERR_CODE']
+      dmaData.cols[i].NOT_USED.val = zipCodeAPI.r[i]['NOT_USED']
+      dmaData.cols[i].DMA_RANK.val = zipCodeAPI.r[i]['DMA_RANK']
+      dmaData.cols[i].METRO_INDICATOR.val = zipCodeAPI.r[i]['METRO_INDICATOR']
+  
+      # If this point is reached, then we have complete data for at least one set and thus we will not term the survey
+      p.surveyWillTerm = False
+  except IndexError:
+    print "IndexError occurred; either we have no data or we do not have 6 full columns of data"
+else:
+  # Status code was not 200, which means that the data did not return successfully; thus we term
+  p.surveyWillTerm = True
+  </exec>
+
+  <text 
+   label="dmaData"
+   sst="0"
+   translateable="0"
+   where="execute,survey">
+    <title>Hidden Question.  DMA data for zipcode.</title>
+    <row label="ZIP_CODE">ZIP_CODE</row>
+    <row label="DMA_CODE">DMA_CODE</row>
+    <row label="DMA_NAME">DMA_NAME</row>
+    <row label="ADDITIONAL_DMA_CODE">ADDITIONAL_DMA_CODE</row>
+    <row label="STATE_CODE">STATE_CODE</row>
+    <row label="STATE_ABV">STATE_ABV</row>
+    <row label="COUNTY_CODE">COUNTY_CODE</row>
+    <row label="COUNTY_NAME">COUNTY_NAME</row>
+    <row label="COUNTY_SIZE">COUNTY_SIZE</row>
+    <row label="NMR_TERR_CODE">NMR_TERR_CODE</row>
+    <row label="NOT_USED">NOT_USED</row>
+    <row label="DMA_RANK">DMA_RANK</row>
+    <row label="METRO_INDICATOR">METRO_INDICATOR</row>
+  </text>
+
+  <suspend/>
+
+  <exec sst="0">
+p.actualStateCode = dmaData.cols[0].STATE_ABV.val
+STATEset=0
+for eachRow in hSTATE.rows: 
+  if eachRow.o.label == ('r%s' % p.actualStateCode): 
+    hSTATE.val = eachRow.index
+    STATEset=1
+    break 
+if STATEset==0:
+  hSTATE.val=hSTATE.rXX.index
+  </exec>
+
+  <radio 
+   label="hSTATE"
+   multicol:count="4"
+   optional="1"
+   translateable="0"
+   uses="multicol.7"
+   where="execute,survey,report">
+    <title>Hidden Question.  US state/territory mapping from the zipcode.</title>
+    <row label="rAL" value="1">Alabama</row>
+    <row label="rAK" value="2">Alaska</row>
+    <row label="rAZ" value="3">Arizona</row>
+    <row label="rAR" value="4">Arkansas</row>
+    <row label="rCA" value="5">California</row>
+    <row label="rCO" value="6">Colorado</row>
+    <row label="rCT" value="7">Connecticut</row>
+    <row label="rDE" value="8">Delaware</row>
+    <row label="rFL" value="9">Florida</row>
+    <row label="rGA" value="10">Georgia</row>
+    <row label="rHI" value="11">Hawaii</row>
+    <row label="rID" value="12">Idaho</row>
+    <row label="rIL" value="13">Illinois</row>
+    <row label="rIN" value="14">Indiana</row>
+    <row label="rIA" value="15">Iowa</row>
+    <row label="rKS" value="16">Kansas</row>
+    <row label="rKY" value="17">Kentucky</row>
+    <row label="rLA" value="18">Louisiana</row>
+    <row label="rME" value="19">Maine</row>
+    <row label="rMD" value="20">Maryland</row>
+    <row label="rMA" value="21">Massachusetts</row>
+    <row label="rMI" value="22">Michigan</row>
+    <row label="rMN" value="23">Minnesota</row>
+    <row label="rMS" value="24">Mississippi</row>
+    <row label="rMO" value="25">Missouri</row>
+    <row label="rMT" value="26">Montana</row>
+    <row label="rNE" value="27">Nebraska</row>
+    <row label="rNV" value="28">Nevada</row>
+    <row label="rNH" value="29">New Hampshire</row>
+    <row label="rNJ" value="30">New Jersey</row>
+    <row label="rNM" value="31">New Mexico</row>
+    <row label="rNY" value="32">New York</row>
+    <row label="rNC" value="33">North Carolina</row>
+    <row label="rND" value="34">North Dakota</row>
+    <row label="rOH" value="35">Ohio</row>
+    <row label="rOK" value="36">Oklahoma</row>
+    <row label="rOR" value="37">Oregon</row>
+    <row label="rPA" value="38">Pennsylvania</row>
+    <row label="rRI" value="39">Rhode Island</row>
+    <row label="rSC" value="40">South Carolina</row>
+    <row label="rSD" value="41">South Dakota</row>
+    <row label="rTN" value="42">Tennessee</row>
+    <row label="rTX" value="43">Texas</row>
+    <row label="rUT" value="44">Utah</row>
+    <row label="rVT" value="45">Vermont</row>
+    <row label="rVA" value="46">Virginia</row>
+    <row label="rWA" value="47">Washington</row>
+    <row label="rWV" value="48">West Virginia</row>
+    <row label="rWI" value="49">Wisconsin</row>
+    <row label="rWY" value="50">Wyoming</row>
+    <row label="rAS" value="51">American Samoa</row>
+    <row label="rDC" value="52">District of Columbia</row>
+    <row label="rFM" value="53">Federated States of Micronesia</row>
+    <row label="rGU" value="54">Guam</row>
+    <row label="rMH" value="55">Marshall Islands</row>
+    <row label="rMP" value="56">Northern Mariana Islands</row>
+    <row label="rPW" value="57">Palau</row>
+    <row label="rPR" value="58">Puerto Rico</row>
+    <row label="rVI" value="59">Virgin Islands</row>
+    <row label="rXX" value="99">Other/None</row>
+  </radio>
+
+  <suspend/>
+
+  <exec sst="0">
+region4NE = ['rCT','rME','rMA','rNH','rNJ','rNY','rPA','rRI','rVT']
+region4MW = ['rIL','rIN','rIA','rKS','rMI','rMN','rMO','rNE','rND','rOH','rSD','rWI']
+region4SO = ['rDE','rDC','rFL','rGA','rMD','rNC','rSC','rVA','rWV','rAL','rKY','rMS','rTN','rAR','rLA','rOK','rTX']
+region4WE = ['rAZ','rCO','rID','rNM','rMT','rUT','rNV','rWY','rAK','rCA','rHI','rOR','rWA']
+
+region4Array = [region4NE, region4MW, region4SO, region4WE]
+
+statevaluelabel = hSTATE.selected.label
+
+for i in range(0, len(region4Array)):
+  if statevaluelabel in region4Array[i]:
+    hRegion4.val = i
+    break
+  </exec>
+
+  <radio 
+   label="hRegion4"
+   grouping="cols"
+   optional="1"
+   translateable="0"
+   where="execute,survey,report">
+    <title>Hidden Question.  Region 4 mapping from the zipcode.</title>
+    <row label="r1" value="1">Northeast</row>
+    <row label="r2" value="2">Midwest</row>
+    <row label="r3" value="3">South</row>
+    <row label="r4" value="4">West</row>
+  </radio>
+
+  <suspend/>
+
+  <exec sst="0">
+region9PAC = ['rWA','rOR','rCA','rAK','rHI']
+region9MTN = ['rMT','rID','rWY','rNV','rUT','rCO','rAZ','rNM']
+region9WNC = ['rND','rSD','rNE','rKS','rMN','rIA','rMO']
+region9WSC = ['rTX','rOK','rAR','rLA']
+region9ENC = ['rWI','rIL','rMI','rIN','rOH']
+region9ESC = ['rKY','rTN','rMS','rAL']
+region9SA =  ['rFL','rGA','rSC','rNC','rVA','rWV','rDC','rMD','rDE']
+region9MA =  ['rNY','rNJ','rPA']
+region9NE =  ['rME','rNH','rVT','rMA','rRI','rCT']
+
+region9Array = [region9PAC, region9MTN, region9WNC, region9WSC, region9ENC, region9ESC, region9SA, region9MA, region9NE]
+
+statevaluelabel = hSTATE.selected.label
+
+for i in range(0, len(region9Array)):
+  if statevaluelabel in region9Array[i]:
+    hRegion9.val = i
+    break
+  </exec>
+
+  <radio 
+   label="hRegion9"
+   grouping="cols"
+   optional="1"
+   translateable="0"
+   where="execute,survey,report">
+    <title>Hidden Question.  Region 9 mapping from the zipcode.</title>
+    <row label="r1" value="1">Pacific (WA, OR, CA, AK, HI)</row>
+    <row label="r2" value="2">Mountain (MT, ID, WY, NV, UT, CO, AZ, NM)</row>
+    <row label="r3" value="3">West North Central (ND, SD, NE, KS, MN, IA, MO)</row>
+    <row label="r4" value="4">West South Central (TX, OK, AR, LA)</row>
+    <row label="r5" value="5">East North Central (WI, IL, MI, IN, OH)</row>
+    <row label="r6" value="6">East South Central (KY, TN, MS, AL)</row>
+    <row label="r7" value="7">South Atlantic (FL, GA, SC, NC, VA, WV, DC, MD, DE)</row>
+    <row label="r8" value="8">Middle Atlantic (NY, NJ, PA)</row>
+    <row label="r9" value="9">New England (ME, NH, VT, MA, RI, CT)</row>
+  </radio>
+
+  <suspend/>
+</block>
+
+<exec>
+Q4.val = Q4.r7.index
+
+if hSTATE.rDC:
+  Q4.val = Q4.r1.index
+if hSTATE.rDE:
+  Q4.val = Q4.r2.index
+if hSTATE.rMD:
+  Q4.val = Q4.r3.index
+if hSTATE.rPA:
+  Q4.val = Q4.r4.index
+if hSTATE.rVA:
+  Q4.val = Q4.r5.index
+if hSTATE.rWV:
+  Q4.val = Q4.r6.index
+</exec>
+
+<radio 
+  label="Q4"
+  optional="1"
+  translateable="0"
+  where="execute,survey,report">
+  <title>State</title>
+  <row label="r1" value="1">DC</row>
+  <row label="r2" value="2">DE</row>
+  <row label="r3" value="3">MD</row>
+  <row label="r4" value="4">PA</row>
+  <row label="r5" value="5">VA</row>
+  <row label="r6" value="6">WV</row>
+  <row label="r7" value="7">All other states or outside the US</row>
+</radio>
+
+<suspend/>
+
+<term cond="Q4.r7">TERM State not DC, DE, MD, PA, VA and WV</term>
+
+<exec>
+print dmaData.DMA_NAME.val
+print dmaData.COUNTY_NAME.val
+if Q4.r3:
+    Q5.val = Q5.r5.index
+if not Q4.r3:
+    Q5.val = Q5.r1.index
+if Q4.r3 and dmaData.COUNTY_NAME.val == "BALTIMORE CITY":
+    Q5.val = Q5.r2.index
+if Q4.r3 and dmaData.COUNTY_NAME.val == "PRINCE GEORGE":
+    Q5.val = Q5.r3.index
+if Q4.r3 and dmaData.COUNTY_NAME.val == "MONTGOMERY":
+    Q5.val = Q5.r4.index
+</exec>
+
+<radio 
+  label="Q5"
+  optional="1"
+  translateable="0"
+  where="execute,survey,report">
+  <title>County</title>
+  <row label="r1" value="1">Outside MD</row>
+  <row label="r2" value="2">Baltimore/City County MD</row>
+  <row label="r3" value="3">Prince Georges County MD</row>
+  <row label="r4" value="4">Montgomery County MD</row>
+  <row label="r5" value="5">Other Counties in MD</row>
+</radio>
+
+<suspend/>
+
+<radio 
+  label="Q6">
+  <title>Age you....?</title>
+  <row label="r1" value="1">Male</row>
+  <row label="r2" value="2">Female</row>
+  <row label="r3" value="3">Prefer not to answer</row>
+</radio>
+
+<suspend/>
+
+<term cond="Q6.r3">TERMINATE Q6 CODE 3</term>
+
+<checkbox 
+  label="Q7"
+  atleast="1"
+  rowShuffle="rotate"
+  shuffle="rows">
+  <title>Do you, or does any member of your immediate family, work for a.....</title>
+  <row label="r1">Advertising agency</row>
+  <row label="r2">Bank</row>
+  <row label="r3">Casino</row>
+  <row label="r4">Market research firm</row>
+  <row label="r5">State Lottery</row>
+  <row label="r6">A lottery game retailer</row>
+  <row label="r7" randomize="0">Other type of company</row>
+  <row label="r8" exclusive="1" randomize="0">Prefer not to answer</row>
+</checkbox>
+
+<suspend/>
+
+<term cond="Q7.r1 or Q7.r3 or Q7.r4 or Q7.r5 or Q7.r6 or Q7.r7">TERMINATE Q7 CODES 1,3,4,5,6 OR 7</term>
+
+<radio 
+  label="Q8">
+  <title>Do you consider yourself morally opposed to lottery and/or gambling?</title>
+  <row label="r1" value="1">Yes</row>
+  <row label="r2" value="2">No</row>
+  <row label="r3" value="3">Not sure/never thought about it</row>
+</radio>
+
+<suspend/>
+
+<term cond="Q8.r1">TERMINATE Q8 CODES 1</term>
+
+<radio 
+  label="Q9">
+  <title>The Maryland Lottery sells many different types of games, one of which is Keno. Have you <u><b>ever</b></u> played the Maryland Lottery's Keno game?</title>
+  <row label="r1" value="1">Yes</row>
+  <row label="r2" value="2">No</row>
+  <row label="r3" value="3">Not sure/can't recall</row>
+</radio>
+
+<suspend/>
+
+<term cond="Q9.r1 or Q9.r2">TERMINATE Q9 CODES 1 OR 2</term>
+
+<radio 
+  label="Q10">
+  <title>Keno is a fast-paced lottery game that is played by selecting up to ten (10) numbers from one (1) to 80. Every three and a half minutes, the Lottery's computer locks in on 20 random numbers which are then displayed. The Maryland Lottery currently sells Keno in two different ways. 
+  <br /><br />
+  Please read the descriptions below and then select an option for each one.</title>
+  <alt>Keno is a fast-paced lottery game that is played by selecting up to ten (10) numbers from one (1) to 80. Every three and a half minutes, the Lottery's computer locks in on 20 random numbers which are then displayed. The Maryland Lottery currently sells Keno in two different ways.</alt>
+  <col label="c1" value="1">Yes, I have played this game</col>
+  <col label="c2" value="2">No, I have not played this</col>
+  <col label="c3" value="3">I'm not sure/Don't know if I've played this</col>
+  <row label="r1" value="1"><b>Keno</b> - <i>choose your numbers then win based on how many you match. Results are then displayed on a monitor. Games cost $1 and the top prize is $100,000.</i></row>
+  <row label="r2" value="2"><b>Packaged Keno 2 Go</b> - <i>purchase a set number of games (20, 40, 60, etc.) for a discounted amount ($.25) that also comes with a discounted top prize of $25,000.</i></row>
+</radio>
+
+<suspend/>
+
+<term cond="Q10.r1.c2 or Q10.r1.c3">TERMINATE KENO = CODES 2 OR 3</term>
+
+<radio 
+  label="Q11">
+  <title>How often do you typically play Keno?</title>
+  <row label="r1" value="1">Once a year or less</row>
+  <row label="r2" value="2">About once every 4-6 months</row>
+  <row label="r3" value="3">About once every 2-3 months</row>
+  <row label="r4" value="4">About once a month</row>
+  <row label="r5" value="5">About once a week</row>
+  <row label="r6" value="6">A few times a week</row>
+  <row label="r7" value="7">About once a day</row>
+  <row label="r8" value="8">Multiple times a day</row>
+</radio>
+
+<suspend/>
+
+<radio 
+  label="Q12"
+  cond="Q11.r1">
+  <title>You indicated that you typically play Keno once a year or less often. How long has it been since you last played the game?</title>
+  <row label="r1" value="1">About a year ago</row>
+  <row label="r2" value="2">About a year and a half to 2 years ago</row>
+  <row label="r3" value="3">More than 2 years ago</row>
+</radio>
+
+<suspend/>
+
+<checkbox 
+  label="Q13"
+  cond="Q11.r1"
+  atleast="1">
+  <title>Besides winning more, what would get you to play Keno more often?
+    <br /><br />
+    Please select all that apply</title>
+  <alt>Besides winning more, what would get you to play Keno more often?</alt>
+  <row label="r1" value="1">If the game was more entertaining</row>
+  <row label="r2" value="2">There was a way to watch the drawings anywhere</row>
+  <row label="r3" value="3">More places to play Keno were available</row>
+  <row label="r4" value="4">I could buy Keno games on my smartphone or tablet</row>
+  <row label="r5" value="5">The drawings were more fun to watch</row>
+  <row label="r6" value="6">Drawings occurred at a faster pace</row>
+  <row label="r7" open="1" openSize="25" randomize="0" value="7">Another reason (please specify)</row>
+</checkbox>
+
+<suspend/>
+
+<number 
+  label="Q14"
+  optional="0"
+  size="3"
+  ss:preText="$"
+  verify="range(1,999),digits">
+  <title>When you play Keno, about how much do you typically spend on a game?</title>
+  <style name="question.after" wrap="ready"><![CDATA[
+$ (':text').attr('maxlength','3');
+    $ (':text').attr('size','3');
+]]></style>
+</number>
+
+<suspend/>
+
+<radio 
+  label="Q15">
+  <title>How long do you usually play Keno for?</title>
+  <row label="r1" value="1">less than 15 minutes</row>
+  <row label="r2" value="2">15 minutes</row>
+  <row label="r3" value="3">30 minutes</row>
+  <row label="r4" value="4">45 minutes</row>
+  <row label="r5" value="5">1 hour</row>
+  <row label="r6" value="6">More than an hour</row>
+</radio>
+
+<suspend/>
+
+<radio 
+  label="Q16">
+  <title>When you play Keno for [pipe: Q15 lower] do you usually play the game...?</title>
+  <row label="r1" value="1">Fast - in that you play games back to back</row>
+  <row label="r2" value="2">Slow - in that you skip games and don't play them one after another</row>
+  <row label="r3" value="3">Some combination of Fast and Slow</row>
+</radio>
+
+<suspend/>
+
+<radio 
+  label="Q17">
+  <title>The Maryland Lottery also allows players to multiply their Keno winnings buy purchasing Keno add-on options.
+    <br /><br />
+    Please read both game options listed below and then select a response for each one.</title>
+  <alt>The Maryland Lottery also allows players to multiply their Keno winnings buy purchasing Keno add-on options.</alt>
+  <col label="c1" value="1">Yes, I have added this option to my Keno games</col>
+  <col label="c2" value="2">No, I have not added this option to my Keno game</col>
+  <col label="c3" value="3">I'm not sure/Don't know if I've added this option</col>
+  <row label="r1" value="1"><b>Keno Bonus</b> - <i>gives players the chance to multiply Keno winnings by up to 10 times, costs 2 times your Keno wager amount. </i></row>
+  <row label="r2" value="2"><b>Keno Super Bonus</b> - <i>gives players the chance to multiply Keno winnings by up to 20 times, costs 3 times your wager amount.</i></row>
+</radio>
+
+<suspend/>
+
+<radio 
+  label="Q18"
+  averages="cols"
+  shuffle="rows"
+  type="rating">
+  <title>To what degree so you agree with the following statements?
+    <br /><br />
+  Please use a scale where '0' means that you ‘Strongly Disagree’ and ‘7’ means you ‘Strongly Agree’ with each statement below.</title>
+  <alt>To what degree so you agree with the following statements?</alt>
+  <col label="c0" value="0">Strongly Disagree (0)</col>
+  <col label="c1" value="1">1</col>
+  <col label="c2" value="2">2</col>
+  <col label="c3" value="3">3</col>
+  <col label="c4" value="4">4</col>
+  <col label="c5" value="5">5</col>
+  <col label="c6" value="6">6</col>
+  <col label="c7" value="7">Strongly Agree (7)</col>
+  <row label="r1" value="1">I enjoy interacting with others that I don't know when I play Keno</row>
+  <row label="r2" value="2">I typically go out with friends or family to play Keno</row>
+  <row label="r3" value="3">My preference is to play Keno while I'm out</row>
+  <row label="r4" value="4">I prefer to play Keno away from social environments</row>
+  <row label="r5" value="5">While I'm out with friends or family I play Keno to occupy my time</row>
+</radio>
+
+<suspend/>
+
+<textarea 
+  label="Q19"
+  cond="Q10.r2.c1"
+  verify="len(3,1000)">
+  <title>When it comes to Packaged Keno 2 Go, why do you play this game?</title>
+  <style name="question.after" wrap="ready"><![CDATA[
+$ ('textarea').removeClass('input');
+]]></style>
+</textarea>
+
+<suspend/>
+
+<radio 
+  label="Q20"
+  cond="Q10.r2.c1">
+  <title>How often do you play?</title>
+  <row label="r1" value="1">Once a year or less</row>
+  <row label="r2" value="2">About once every 4-6 months</row>
+  <row label="r3" value="3">About once every 2-3 months</row>
+  <row label="r4" value="4">About once a month</row>
+  <row label="r5" value="5">About once a week</row>
+  <row label="r6" value="6">A few times a week</row>
+  <row label="r7" value="7">About once a day</row>
+  <row label="r8" value="8">Multiple times a day</row>
+</radio>
+
+<suspend/>
+
+<radio 
+  label="Q21"
+  cond="Q10.r2.c1">
+  <title>When you play Packaged Keno 2 Go, about how many games do you normally purchase?</title>
+  <row label="r1" value="1">20 games for $5</row>
+  <row label="r2" value="2">40 games for $10</row>
+  <row label="r3" value="3">60 games for $15</row>
+  <row label="r4" value="4">80 games for $20</row>
+  <row label="r5" value="5">100 games for $25</row>
+</radio>
+
+<suspend/>
+
+<textarea 
+  label="Q22"
+  cond="Q10.r2.c1"
+  optional="0"
+  verify="len(3,1000)">
+  <title>What makes Packaged Keno 2 Go better than playing Keno the traditional way?</title>
+  <style name="question.after" wrap="ready"><![CDATA[
+$ ('textarea').removeClass('input');
+]]></style>
+</textarea>
+
+<suspend/>
+
+<checkbox 
+  label="Q23"
+  atleast="1"
+  shuffle="rows">
+  <title>Which, if any, other Maryland Lottery games have you played in the last year?
+<br /><br />
+<b>IMAGES AND FULL GAME DESCRIPTIONS</b>
+    <br /><br />
+  (Select all that apply)</title>
+  <alt>Which, if any, other Maryland Lottery games have you played in the last year?</alt>
+  <row label="r1">5 Card Cash</row>
+  <row label="r2">Bonus Match 5</row>
+  <row label="r3">Cash 4 Life</row>
+  <row label="r4">Instant scratch off games</row>
+  <row label="r5">Mega Millions</row>
+  <row label="r6">Multi Match</row>
+  <row label="r7">Pick 3</row>
+  <row label="r8">Pick 4</row>
+  <row label="r9">Powerball</row>
+  <row label="r10">Racetrax</row>
+  <row label="r11" exclusive="1" randomize="0">None of these</row>
+</checkbox>
+
+<suspend/>
+
+<style label="hideElements" name="question.element"><![CDATA[
+\@if ec.simpleList
+<div class="element $(rowStyle) $(levels) $(extraClasses) ${col.group.styles.ss.groupClassNames if col.group else (row.group.styles.ss.groupClassNames if row.group else "")} $(col.styles.ss.colClassNames) $(row.styles.ss.rowClassNames) ${"clickableCell" if isClickable else ""}"$(extra)>
+    ${v2_insertStyle('el.label.start')}
+    ${v2_insertStyle('el.label.end')}
+</div>
+\@else
+<$(tag) $(headers) class="cell nonempty element $(levels) ${"desktop" if this.grouping.cols else "mobile"} border-collapse $(extraClasses) ${col.group.styles.ss.groupClassNames if col.group else (row.group.styles.ss.groupClassNames if row.group else "")} $(col.styles.ss.colClassNames) $(row.styles.ss.rowClassNames) ${"clickableCell" if isClickable else ""}"$(extra)>
+    ${v2_insertStyle('el.label.start')}
+    ${v2_insertStyle('el.label.end')}
+</$(tag)>
+\@endif
+]]></style>
+<radio 
+  label="Q24"
+  cond="not Q23.r11"
+  shuffle="rows">
+  <title>In general, in which of these describes about how frequently you play...?
+    <br /><br />
+    (Select one per row).</title>
+  <alt>In general, in which of these describes about how frequently you play...?</alt>
+  <style cols="c9" copy="hideElements" name="question.element" rows="r4,r7,r8"/>
+  <col label="c1" value="1">Once per year or less</col>
+  <col label="c2" value="2">About once every 4-6 months</col>
+  <col label="c3" value="3">About once every 2-3 months</col>
+  <col label="c4" value="4">About once per month</col>
+  <col label="c5" value="5">About once per week</col>
+  <col label="c6" value="6">More than once per week</col>
+  <col label="c7" value="7">Every day/draw</col>
+  <col label="c8" value="8">Multiple times a day</col>
+  <col label="c9" value="9">Depends on jackpot level</col>
+  <row label="r1" cond="Q23.r1" value="1">5 Card Cash</row>
+  <row label="r2" cond="Q23.r2" value="2">Bonus Match 5</row>
+  <row label="r3" cond="Q23.r3" value="3">Cash 4 Life</row>
+  <row label="r4" cond="Q23.r4" value="4">Instant scratch-off games</row>
+  <row label="r5" cond="Q23.r5" value="5">Mega Millions</row>
+  <row label="r6" cond="Q23.r6" value="6">Multi Match</row>
+  <row label="r7" cond="Q23.r7" value="7">Pick 3</row>
+  <row label="r8" cond="Q23.r8" value="8">Pick 4</row>
+  <row label="r9" cond="Q23.r9" value="9">Powerball</row>
+  <row label="r10" cond="Q23.r10" value="10">Racetrax</row>
+</radio>
+
+<suspend/>
+
+<radio 
+  label="Q25">
+  <title>Have you ever played Keno in casino setting?</title>
+  <row label="r1" value="1">Yes</row>
+  <row label="r2" value="2">No</row>
+  <row label="r3" value="3">Not sure/don't recall</row>
+</radio>
+
+<suspend/>
+
+<radio 
+  label="Q26"
+  cond="Q25.r1">
+  <title>In general, which of these describes how frequently you play Keno in a casino?</title>
+  <row label="r1" value="1">Once per year or less</row>
+  <row label="r2" value="2">About once every 4-6 months</row>
+  <row label="r3" value="3">About once every 2-3 months</row>
+  <row label="r4" value="4">About once per month</row>
+  <row label="r5" value="5">About once per week</row>
+  <row label="r6" value="6">More than once per week</row>
+  <row label="r7" value="7">Every day</row>
+  <row label="r8" value="8">Multiple times a day</row>
+</radio>
+
+<suspend/>
+
+<radio 
+  label="Q27"
+  cond="Q25.r1">
+  <title>Are there advantages to playing Maryland Lottery Keno games versus playing Keno in a casino?</title>
+  <row label="r1" value="1">Yes, there are advantages to playing Maryland Lottery Keno vs. Keno in a casino</row>
+  <row label="r2" value="2">No, there aren't any advantages</row>
+  <row label="r3" value="3">Not sure/haven't thought about it</row>
+</radio>
+
+<suspend/>
+
+<textarea 
+  label="Q28"
+  cond="Q27.r1"
+  optional="0"
+  verify="len(3,1000)">
+  <title>What are the advantages?
+    <br /><br />
+    Please explain.</title>
+  <alt>What are the advantages?</alt>
+  <style name="question.after" wrap="ready"><![CDATA[
+$ ('textarea').removeClass('input');
+]]></style>
+</textarea>
+
+<suspend/>
+
+<radio 
+  label="Q29"
+  averages="cols"
+  type="rating">
+  <title>We would now like to get your opinions a couple of options that could be added to your Keno games to multiply your winnings. 
+    <br /><br />
+    Please start viewing each video which explains the option and then rate it on the criteria listed using a scale where '0' means that you ‘Strongly Disagree’ and ‘7’ means you ‘Strongly Agree’ with each item.
+    <br /><br />
+    Keno-lette A</title>
+  <alt>We would now like to get your opinions a couple of options that could be added to your Keno games to multiply your winnings. - Keno-lette A</alt>
+  <col label="c0" value="0">Strongly Disagree (0)</col>
+  <col label="c1" value="1">1</col>
+  <col label="c2" value="2">2</col>
+  <col label="c3" value="3">3</col>
+  <col label="c4" value="4">4</col>
+  <col label="c5" value="5">5</col>
+  <col label="c6" value="6">6</col>
+  <col label="c7" value="7">Strongly Agree (7)</col>
+  <row label="r1" value="1">This option is appealing</row>
+  <row label="r2" value="2">I am likely to add this when I play Keno</row>
+  <row label="r3" value="3">This option provides a more interesting way to play Keno</row>
+  <row label="r4" value="4">Game specific item placeholder</row>
+  <row label="r5" value="5">Overall this option enhances Keno</row>
+</radio>
+
+<suspend/>
+
+<radio 
+  label="Q30"
+  averages="cols"
+  type="rating">
+  <title>We would now like to get your opinions a couple of options that could be added to your Keno games to multiply your winnings. 
+    <br /><br />
+    Please start viewing each video which explains the option and then rate it on the criteria listed using a scale where '0' means that you ‘Strongly Disagree’ and ‘7’ means you ‘Strongly Agree’ with each item.
+    <br /><br />
+    Keno-lette B</title>
+  <alt>We would now like to get your opinions a couple of options that could be added to your Keno games to multiply your winnings. - Keno-lette B</alt>
+  <col label="c0" value="0">Strongly Disagree (0)</col>
+  <col label="c1" value="1">1</col>
+  <col label="c2" value="2">2</col>
+  <col label="c3" value="3">3</col>
+  <col label="c4" value="4">4</col>
+  <col label="c5" value="5">5</col>
+  <col label="c6" value="6">6</col>
+  <col label="c7" value="7">Strongly Agree (7)</col>
+  <row label="r1" value="1">This option is appealing</row>
+  <row label="r2" value="2">I am likely to add this when I play Keno</row>
+  <row label="r3" value="3">This option provides a more interesting way to play Keno</row>
+  <row label="r4" value="4">Game specific item placeholder</row>
+  <row label="r5" value="5">Overall this option enhances Keno</row>
+</radio>
+
+<suspend/>
+
+<radio 
+  label="Q31"
+  averages="cols"
+  type="rating">
+  <title>We would now like to get your opinions a couple of options that could be added to your Keno games to multiply your winnings. 
+    <br /><br />
+    Please start viewing each video which explains the option and then rate it on the criteria listed using a scale where '0' means that you ‘Strongly Disagree’ and ‘7’ means you ‘Strongly Agree’ with each item.
+    <br /><br />
+    Bullseye (US)</title>
+  <alt>We would now like to get your opinions a couple of options that could be added to your Keno games to multiply your winnings. - Bullseye (US)</alt>
+  <col label="c0" value="0">Strongly Disagree (0)</col>
+  <col label="c1" value="1">1</col>
+  <col label="c2" value="2">2</col>
+  <col label="c3" value="3">3</col>
+  <col label="c4" value="4">4</col>
+  <col label="c5" value="5">5</col>
+  <col label="c6" value="6">6</col>
+  <col label="c7" value="7">Strongly Agree (7)</col>
+  <row label="r1" value="1">This option is appealing</row>
+  <row label="r2" value="2">I am likely to add this when I play Keno</row>
+  <row label="r3" value="3">This option provides a more interesting way to play Keno</row>
+  <row label="r4" value="4">Game specific item placeholder</row>
+  <row label="r5" value="5">Overall this option enhances Keno</row>
+</radio>
+
+<suspend/>
+
+<radio 
+  label="Q32"
+  averages="cols"
+  type="rating">
+  <title>We would now like to get your opinions a couple of options that could be added to your Keno games to multiply your winnings. 
+    <br /><br />
+    Please start viewing each video which explains the option and then rate it on the criteria listed using a scale where '0' means that you ‘Strongly Disagree’ and ‘7’ means you ‘Strongly Agree’ with each item.
+    <br /><br />
+    Keno Extra</title>
+  <alt>We would now like to get your opinions a couple of options that could be added to your Keno games to multiply your winnings. - Keno Extra</alt>
+  <col label="c0" value="0">Strongly Disagree (0)</col>
+  <col label="c1" value="1">1</col>
+  <col label="c2" value="2">2</col>
+  <col label="c3" value="3">3</col>
+  <col label="c4" value="4">4</col>
+  <col label="c5" value="5">5</col>
+  <col label="c6" value="6">6</col>
+  <col label="c7" value="7">Strongly Agree (7)</col>
+  <row label="r1" value="1">This option is appealing</row>
+  <row label="r2" value="2">I am likely to add this when I play Keno</row>
+  <row label="r3" value="3">This option provides a more interesting way to play Keno</row>
+  <row label="r4" value="4">Game specific item placeholder</row>
+  <row label="r5" value="5">Overall this option enhances Keno</row>
+</radio>
+
+<suspend/>
+
+<select 
+  label="Q33"
+  minRanks="3"
+  optional="1"
+  unique="none,cols"
+  uses="ranksort.4">
+  <title>Now that you've had an opportunity to review the Keno add-on options being considered, please put them in rank order so that the game you like the best is placed in the 1st place position and the option that you like the least is placed in the 3rd place position.</title>
+  <choice label="ch1">1st</choice>
+  <choice label="ch2">2nd</choice>
+  <choice label="ch3">3rd</choice>
+  <row label="r1" value="1">Keno-lette A</row>
+  <row label="r2" value="2">Keno-lette B</row>
+  <row label="r3" value="3">Bullseye</row>
+  <row label="r4" value="4">Keno Extra</row>
+</select>
+
+<suspend/>
+
+<textarea 
+  label="Q34"
+  optional="0"
+  verify="len(3,1000)">
+  <title>What do you enjoy about playing Keno?</title>
+  <style name="question.after" wrap="ready"><![CDATA[
+$ ('textarea').removeClass('input');
+]]></style>
+</textarea>
+
+<suspend/>
+
+<textarea 
+  label="Q35"
+  optional="0"
+  verify="len(3,1000)">
+  <title>Is there anything that you do not like when it comes to playing Keno?</title>
+  <style name="question.after" wrap="ready"><![CDATA[
+$ ('textarea').removeClass('input');
+]]></style>
+</textarea>
+
+<suspend/>
+
+<radio 
+  label="Q36"
+  cond="Q23.count ge 1 and not Q23.r11"
+  averages="cols"
+  rowShuffle="rotate"
+  shuffle="rows"
+  type="rating">
+  <title>Are there aspects of Keno that make it better than other lottery games?
+    <br /><br />
+    Please use a scale where '0' means that you ‘Strongly Disagree’ and ‘7’ means you ‘Strongly Agree’ on each statement below.</title>
+  <alt>Are there aspects of Keno that make it better than other lottery games?</alt>
+  <col label="c0" value="0">Strongly Disagree (0)</col>
+  <col label="c1" value="1">1</col>
+  <col label="c2" value="2">2</col>
+  <col label="c3" value="3">3</col>
+  <col label="c4" value="4">4</col>
+  <col label="c5" value="5">5</col>
+  <col label="c6" value="6">6</col>
+  <col label="c7" value="7">Strongly Agree (7)</col>
+  <row label="r1" value="1">Keno is better than other lottery games because I can choose more numbers to play</row>
+  <row label="r2" value="2">Keno is a more convenient lottery game</row>
+  <row label="r3" value="3">The ability to choose the amounts I want to wager make Keno more appealing</row>
+  <row label="r4" value="4">Being able to play Keno in locations that are fun make it a great game</row>
+  <row label="r5" value="5">Keno offers the flexibility to play how I want</row>
+  <row label="r6" value="6">The odds of winning are better playing Keno than other games</row>
+  <row label="r7" cond="Q25.r1" value="7">Playing the lottery's version of Keno is a better alternative to the Keno played in a casino</row>
+  <row label="r8" value="8">I like that drawings for Keno are held every 3.5 minutes</row>
+  <row label="r9" value="9">Keno is an appealing game</row>
+  <row label="r10" value="10">I am likely to play Keno in the next 30 days</row>
+  <row label="r11" value="11">Keno is an exciting game to play</row>
+</radio>
+
+<suspend/>
+
+<radio 
+  label="Q37">
+  <title>In comparison to this time last year (April 2018), would you say that the <u><b>number of times</b></u> you play Keno has...?</title>
+  <row label="r1" value="1">Increased</row>
+  <row label="r2" value="2">Stayed the same</row>
+  <row label="r3" value="3">Decreased</row>
+</radio>
+
+<suspend/>
+
+<textarea 
+  label="Q38"
+  cond="Q37.r1 or Q37.r3"
+  optional="0"
+  verify="len(3,1000)">
+  <title>Why has it [pipe: Q37 lower]?</title>
+  <style name="question.after" wrap="ready"><![CDATA[
+$ ('textarea').removeClass('input');
+]]></style>
+</textarea>
+
+<suspend/>
+
+<radio 
+  label="Q39">
+  <title>And in comparison to this time last year (May 2018), would you say that the <u><b>amount you spend</b></u> playing Keno has...?</title>
+  <row label="r1" value="1">Increased</row>
+  <row label="r2" value="2">Stayed the same</row>
+  <row label="r3" value="3">Decreased</row>
+</radio>
+
+<suspend/>
+
+<checkbox 
+  label="Q40"
+  atleast="1">
+  <title>When you play Keno, how do you check to see if you have won?
+    <br /><br />
+    Select all that apply</title>
+  <alt>When you play Keno, how do you check to see if you have won?</alt>
+  <row label="r1">Watch my game on the Keno monitor</row>
+  <row label="r2">Check my numbers at the Quick Check machine</row>
+  <row label="r3">Use the www.mdlottery.com website</row>
+  <row label="r4">Use another option</row>
+</checkbox>
+
+<suspend/>
+
+<radio 
+  label="Q41"
+  cond="Q40.r1">
+  <title>How important is viewing the animation where the winning numbers are being selected (as shown in the picture below) when you play Keno?
+    <br /><br />
+    <b>PICTURE OF NUMBER DRAW IN PROGRESS</b>
+    <br /><br />
+  Please use a scale where '0' means that this is 'Not At All Important' and '7' means that they play a ‘Very Important' role.
+</title>
+  <alt>How important is viewing the animation where the winning numbers are being selected (as shown in the picture below) when you play Keno?</alt>
+  <row label="r0" value="0">Not at all important (0)</row>
+  <row label="r1" value="1">1</row>
+  <row label="r2" value="2">2</row>
+  <row label="r3" value="3">3</row>
+  <row label="r4" value="4">4</row>
+  <row label="r5" value="5">5</row>
+  <row label="r6" value="6">6</row>
+  <row label="r7" value="7">Very Important (7)</row>
+</radio>
+
+<suspend/>
+
+<textarea 
+  label="Q42"
+  cond="Q41.r0 or Q41.r1 or Q41.r2 or Q41.r3"
+  optional="0"
+  verify="len(3,1000)">
+  <title>Why do you think that viewing the winning number animation provides little benefit?</title>
+  <style name="question.after" wrap="ready"><![CDATA[
+$ ('textarea').removeClass('input');
+]]></style>
+</textarea>
+
+<suspend/>
+
+<radio 
+  label="Q43">
+  <title>Please take a look at both screen options below and select the option that best fits each statement.</title>
+  <col label="c1" value="1">Screen Option A</col>
+  <col label="c2" value="2">Screen Option B</col>
+  <row label="r1" value="1">Uses eye-catching graphics</row>
+  <row label="r2" value="2">Offers a beneficial way for me to check Keno winning numbers</row>
+  <row label="r3" value="3">Provides a traditional way to check Keno winning numbers</row>
+</radio>
+
+<suspend/>
+
+<radio 
+  label="Q44"
+  averages="cols"
+  type="rating">
+  <title>In general, how often do you do each of the following activities?
+    <br /><br />
+    (Select one per row).</title>
+  <alt>In general, how often do you do each of the following activities?</alt>
+  <col label="c1" value="1">Never</col>
+  <col label="c2" value="2">About once a month or less often</col>
+  <col label="c3" value="3">A few times a week</col>
+  <col label="c4" value="4">About once a  day</col>
+  <col label="c5" value="5">Multiple times a day</col>
+  <row label="r1" value="1">Visit www.mdlottery.com</row>
+  <row label="r2" value="2">Access the Maryland Lottery App</row>
+  <row label="r3" value="3">Use the Maryland Lottery Keno &amp; Racetrax App</row>
+  <row label="r4" value="4">Listen to recorded music, books, etc.</row>
+  <row label="r5" value="5">Watch TV or movies at home</row>
+  <row label="r6" value="6">Use the internet</row>
+  <row label="r7" value="7">Read (books or magazines)</row>
+</radio>
+
+<suspend/>
+
+<checkbox 
+  label="Q45"
+  cond="not Q44.r6.c1"
+  atleast="1">
+  <title>Which of the following social media sites do you actively use or visit?
+    <br /><br />
+    Select all that apply.</title>
+  <alt>Which of the following social media sites do you actively use or visit?</alt>
+  <row label="r1">Ask.fm</row>
+  <row label="r2">Facebook</row>
+  <row label="r3">LinkedIn</row>
+  <row label="r4">Twitter</row>
+  <row label="r5">YouTube</row>
+  <row label="r6">Flickr</row>
+  <row label="r7">Tumblr</row>
+  <row label="r8">Periscope</row>
+  <row label="r9">Pinterest</row>
+  <row label="r10">Instagram</row>
+  <row label="r11">Google+</row>
+  <row label="r12">Snapchat</row>
+  <row label="r13">Reddit</row>
+  <row label="r14">Qzone</row>
+  <row label="r15">Weibo</row>
+  <row label="r16" open="1" openSize="25" randomize="0">Other (Please specify)</row>
+  <row label="r17" exclusive="1" randomize="0">None of these</row>
+</checkbox>
+
+<suspend/>
+
+<radio 
+  label="Q46">
+  <title>Thinking of the residence in which you live, do you...?</title>
+  <row label="r1" value="1">Own</row>
+  <row label="r2" value="2">Rent</row>
+  <row label="r3" value="3">Live rent-free</row>
+</radio>
+
+<suspend/>
+
+<radio 
+  label="Q47">
+  <title>Which of these best describes your current employment status?</title>
+  <row label="r1" value="1">Employed part-time</row>
+  <row label="r2" value="2">Employed full-time</row>
+  <row label="r3" value="3">Retired</row>
+  <row label="r4" value="4">Temporarily unemployed</row>
+  <row label="r5" value="5">Disabled</row>
+  <row label="r6" value="6">Full-time student</row>
+  <row label="r7" value="7">Homemaker</row>
+  <row label="r8" value="8">Never worked</row>
+</radio>
+
+<suspend/>
+
+<radio 
+  label="Q48">
+  <title>What was the last level of formal education that you completed?</title>
+  <row label="r1" value="1">Some High School</row>
+  <row label="r2" value="2">High School Graduate or Equivalent</row>
+  <row label="r3" value="3">Some College</row>
+  <row label="r4" value="4">Associates Degree or Technical School Certification</row>
+  <row label="r5" value="5">Bachelors Degree</row>
+  <row label="r6" value="6">Graduate or Professional Degree</row>
+  <row label="r7" value="7">Don't know/Prefer not to answer</row>
+</radio>
+
+<suspend/>
+
+<radio 
+  label="Q49">
+  <title>What is the total combined annual income – before taxes – of all members of your household, including yourself? 
+    <br /><br />
+  Please include income from jobs as well as bonuses, shares of profits and from all other sources.</title>
+  <alt>What is the total combined annual income – before taxes – of all members of your household, including yourself? </alt>
+  <row label="r1" value="1">Less Than $15,000</row>
+  <row label="r2" value="2">$15,000 - $24,999</row>
+  <row label="r3" value="3">$25,000 - $49,999</row>
+  <row label="r4" value="4">$50,000 - $74,999</row>
+  <row label="r5" value="5">$75,000 - $99,999</row>
+  <row label="r6" value="6">$100,000 - $149,999</row>
+  <row label="r7" value="7">$150,000 - $199,999</row>
+  <row label="r8" value="8">$200,000 or more</row>
+</radio>
+
+<suspend/>
+
+<checkbox 
+  label="Q50"
+  atleast="1">
+  <title>Which of the following racial groups best describes you?
+    <br /><br />
+  (Select all that apply)</title>
+  <alt>Which of the following racial groups best describes you?</alt>
+  <row label="r1">Asian</row>
+  <row label="r2">African American/Black</row>
+  <row label="r3">American Indian or Native Alaskan</row>
+  <row label="r4">White/Anglo/Caucasian</row>
+  <row label="r5">Other</row>
+  <row label="r6" exclusive="1" randomize="0">Don't know/Prefer not to answer</row>
+</checkbox>
+
+<suspend/>
+
+<radio 
+  label="Q51">
+  <title>Do you consider yourself of Hispanic or Latino origin or descent?</title>
+  <row label="r1" value="1">Yes</row>
+  <row label="r2" value="2">No</row>
+  <row label="r3" value="3">Don't know/Prefer not to answer</row>
+</radio>
+
+<suspend/>
+
+<html label="QEND" where="survey">Those are all of our questions. Thank you very much for your time and participation!
+
+&lt;script type="text/javascript"&gt;
+$ ('#btn_continue').hide();
+setTimeout(function(){
+  $ ('#btn_continue').click();
+},3000);  
+&lt;/script&gt;</html>
+
+<suspend/>
+
+<note>End = Questionnaire</note>
+<suspend/>
+
+<html label="rnEndOfSurvey" cond="gv.survey.root.state.testing" translateable="0" where="survey">Thanks for completing the survey. This page is shown for testing only. Please close the window to exit.</html>
+
+<suspend/>
+
+<block label="blkQualityChecks" builder:title="Quality Checks" sst="0">
+  <exec>
+#######################################
+# Speeder Auto Check Settings:
+#######################################
+
+tplSpeederAutoCheckSettings.r0.val = '1' #On/Off settings (1 = On, 2 = Off) - this check On by default
+tplSpeederAutoCheckSettings.r1.val = '0.3' #Percentage of Median time used to check speeder
+tplSpeederAutoCheckSettings.r2.val = '30' #Minimum completes to start auto check
+tplSpeederAutoCheckSettings.r3.val = '1000' #Maximum completes used to calculate Median time
+
+#######################################
+# Straightliner Check Settings:
+#######################################
+
+tplStraightlinerSettings.r0.val = '2' #On/Off settings (1 = On, 2 = Off) - this check Off by default
+
+#####
+# adjust other Straightliner Settings in isStraightliner() function 
+#######################################
+  </exec>
+
+  <text 
+   label="tplSpeederAutoCheckSettings"
+   cond="tplShow()"
+   randomize="0"
+   size="25"
+   translateable="0"
+   where="execute,survey,notdp">
+    <title>Speeder Auto Check Settings:</title>
+    <row label="r0">AutoCheck Speeder On/Off settings</row>
+    <row label="r1">Percentage of Median time used to check racer</row>
+    <row label="r2">Minimum completes to start auto check</row>
+    <row label="r3">Maximum completes used to calculate Median time</row>
+  </text>
+
+  <text 
+   label="tplStraightlinerSettings"
+   cond="tplShow()"
+   randomize="0"
+   size="25"
+   translateable="0"
+   where="execute,survey,notdp">
+    <title>Straightliner Settings:</title>
+    <row label="r0">Straightliner Check On/Off settings</row>
+  </text>
+
+  <suspend/>
+
+  <block label="blkSpeederAutoCheckAPI" cond="(tplSpeederAutoCheckSettings.r0.val == '1' and gv.survey.root.state.live)" builder:title="Speeder Auto Check API Call">
+    <exec>
+tt = int(timeSpent())
+mc = int(tplSpeederAutoCheckSettings.r3.val)
+medianTime.r3.val = tt
+
+server = getHostId(gv)
+p.speederDict = dict(pnum=gv.survey.path,ss=server,rid=record,tt=tt,mc=mc)
+    </exec>
+
+    <logic label="speederAutoCheckAPI" api:params="p.speederDict" api:url="https://speeders.researchnow.com/spdrchk/gbtSpeedTest.php" uses="api.1"/>
+    <exec>
+if speederAutoCheckAPI.status == 200:
+    outputAPI = json_loads(speederAutoCheckAPI.r[1:-2])
+    medianTime.r1.val = outputAPI['medianTime']
+    medianTime.r2.val = outputAPI['completes']
+    isSpeederAutoCheck()
+else:
+    speederAutoCheck.val = speederAutoCheck.r3.index
+    </exec>
+
+    <text 
+    label="medianTime"
+    cond="tplShow()"
+    randomize="0"
+    size="25"
+    translateable="0"
+    where="execute,survey,notdp">
+      <title>medianTime</title>
+      <row label="r1">medianTime</row>
+      <row label="r2">medianCompletes</row>
+      <row label="r3">time used for speeder check</row>
+    </text>
+  </block>
+
+  <exec>
+#######################################
+# Run Quality Checks  
+#######################################
+isStraightliner()
+isSpeeder()
+isSlowpoke()
+  </exec>
+
+  <block label="blkQualityCheckTracking" cond="tplShow()" builder:title="Quality Check Tracking Questions">
+    <radio 
+    label="straightlinerCheck"
+    optional="1"
+    randomize="0"
+    translateable="0"
+    where="execute,survey,notdp">
+      <title>Straightliner Check</title>
+      <row label="r1">Failed</row>
+      <row label="r2">Passed</row>
+    </radio>
+
+    <radio 
+    label="speederAuto"
+    optional="1"
+    randomize="0"
+    translateable="0"
+    where="execute,survey,notdp">
+      <title>Speeder Check</title>
+      <row label="r1">Failed</row>
+      <row label="r2">Passed</row>
+    </radio>
+
+    <radio 
+    label="speederAutoCheck"
+    optional="1"
+    randomize="0"
+    translateable="0"
+    where="execute,survey,notdp">
+      <title>Speeder Auto Check</title>
+      <row label="r1">Failed</row>
+      <row label="r2">Passed</row>
+      <row label="r3">Server Call Failed</row>
+    </radio>
+
+    <radio 
+    label="slowpokeCheck"
+    optional="1"
+    randomize="0"
+    translateable="0"
+    where="execute,survey,notdp">
+      <title>Slowpoke Check</title>
+      <row label="r1">Failed</row>
+      <row label="r2">Passed</row>
+    </radio>
+  </block>
+
+  <suspend/>
+
+  <exec>
+#######################################
+# drop marker  
+#######################################
+
+if straightlinerCheck.r1:
+  setMarker('straightlinerAuto')
+
+elif speederAuto.r1:
+  setMarker('speederAuto')
+
+elif speederAutoCheck.r1:
+  setMarker('speederAutoCheck')
+  
+elif slowpokeCheck.r1:
+  setMarker('slowpokeAuto')
+  </exec>
+
+  <suspend/>
+
+  <term cond="hasMarker('speederAuto')">Speeder Check Failed</term>
+
+  <term cond="hasMarker('speederAutoCheck')">Speeder Auto Check Failed</term>
+
+  <term cond="hasMarker('slowpokeAuto')">SlowPoke Check Failed</term>
+
+  <term cond="hasMarker('straightlinerAuto')">Straightliner Check Failed</term>
+
+  <term cond="hasMarker('badopenAuto')">Verbatim Check Failed</term>
+
+  <term cond="hasMarker('failedAuto')">Quality Check Failed</term>
+
+  <suspend/>
+
+  <exec when="init">
+#######################################
+# Quality Checks Functions
+#######################################
+
+
+
+def isStraightliner():
+    if tplStraightlinerSettings.r0.val == '1':
+        #######################################
+        # Update straightliner check settings
+        #######################################
+
+        questions = [q4, q5, q6]               ##### grids to checks
+        numbRequiredGridsToFail = 2       ##### number of grids respondent need to fail at
+        
+        #######################################     
+        # Example how to add other checks   
+        ####################################### 
+        #otherFailed = 0
+        #if not q1.r1.c2:
+        #   otherFailed = 1
+        
+        straightlinerCheck.val = straightlinerCheck.r2.index
+        
+        gridsFailed = 0
+        for q in questions:
+            sl = True
+            pval = None
+            rowcount = 0
+            for r in q.rows: 
+                if r.any:
+                    if  pval is not None and r.val != pval:   # not first answered row
+                        sl = False
+                        break
+                    pval = r.val
+                    rowcount += 1
+
+            if rowcount &gt; 1 and sl:           #if more than 1 row and straightliner
+                gridsFailed += 1
+                     
+        #######################################     
+        # Example how to add other checks to condition
+        ####################################### 
+        # if gridsFailed &gt;= numbRequiredGridsToFail or otherFailed:
+                                
+        if gridsFailed &gt;= numbRequiredGridsToFail:
+            straightlinerCheck.val = straightlinerCheck.r1.index
+            
+
+def isSpeeder():  
+    quota_cells = gv.survey.root.quota.getQuotaCells()
+    current, limit, overquota = quota_cells["/Settings/Seconds"]
+    p.minTime = limit
+    
+    speederAuto.val = speederAuto.r2.index
+
+    if timeSpent() lt p.minTime:
+        speederAuto.val = speederAuto.r1.index
+
+def isSpeederAutoCheck():
+
+  current, limit, overquota = gv.survey.root.quota.getQuotaCells()["/Settings/Seconds"]
+    
+  if limit == 0:
+    speederAutoCheck.val = speederAutoCheck.r2.index 
+
+    if int(medianTime.r2.val) &gt;= int(tplSpeederAutoCheckSettings.r2.val): #check # of completes to date
+      mTime = int(medianTime.r1.val) * float(tplSpeederAutoCheckSettings.r1.val) #check median time
+      print "mTIME:"
+      print mTime
+
+      if timeSpent() lt mTime:
+        speederAutoCheck.val = speederAutoCheck.r1.index
+
+def isSlowpoke():
+    from datetime import datetime
+  
+    quota_cells = gv.survey.root.quota.getQuotaCells()
+    current, limit, overquota = quota_cells["/Settings/Hours"]
+    maxTime = limit * 3600
+    
+    fmt = '%m/%d/%Y %H:%M'
+
+    start_time = datetime.strptime(start_date.unsafe_val, fmt)
+    end_time = datetime.now()
+
+    slowpokeCheck.val = slowpokeCheck.r2.index
+    
+    if maxTime != 0 and (end_time - start_time).total_seconds() gt maxTime:
+        slowpokeCheck.val = slowpokeCheck.r1.index
+    
+#######################################
+# Utility Functions
+#######################################
+def tplShow():
+  return settings=='test' or gv.survey.root.state == 'live'
+  
+# 
+#######################################
+  </exec>
+</block>
+</survey>
