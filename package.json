@@ -1,0 +1,26 @@
+{
+  "name": "node-practice",
+  "version": "1.0.0",
+  "description": "Repository for my self training in Node",
+  "main": "server.js",
+  "scripts": {
+    "test": "\"\"\u001b[Dtest",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rgberou/Node-Practice.git"
+  },
+  "keywords": [
+    "node-practice"
+  ],
+  "author": "Argie Berou",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rgberou/Node-Practice/issues"
+  },
+  "homepage": "https://github.com/rgberou/Node-Practice#readme",
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
