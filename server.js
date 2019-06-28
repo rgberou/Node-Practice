@@ -1,12 +1,22 @@
 const http=require('http');
 
-const routes=require('./routes')
+const express=require('express');
+const bodyParser=require('body-parser');
+const app=express();
 
-/*http.createServer(function(req,res){
+const adminRoutes=require('./routes/admin');
+const shopRoutes=require('./routes/shop')
 
-});*/
+//adding body parser
+app.use(bodyParser.urlencoded({extended:false}));
 
-const server=http.createServer(routes);
+app.use('/admin',adminRoutes);
+app.use(shopRoutes);
 
-server.listen(30001);
+app.use((req,res,next)=>{
+	res.status(404).send('<h1>Page not found</h1>');
+});
+
+
+app.listen(30002)
 
