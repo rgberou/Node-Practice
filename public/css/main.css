@@ -44,3 +44,25 @@ main{
 	border: 1px solid #AAB547;
 	font:inherit;
 }
+.grid{
+	text-align: center;
+	margin-top: 20px;
+}
+.card{
+	display: inline-block;
+	position: relative;
+	-moz-box-shadow: 1px 2px 4px rgba(0, 0, 0,0.5);
+	-webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+	box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+	padding: 10px;
+	background: white;
+	margin-right: 25%;
+	margin-left: 25%;
+}
+
+
+.title{
+	text-align: left;
+	margin: 10px;
+
+}

@@ -7,6 +7,7 @@ const app=express();
 const adminData=require('./routes/admin');
 const shopRoutes=require('./routes/shop')
 
+app.set('view engine','pug');
 //adding body parser
 app.use(bodyParser.urlencoded({extended:false}));app.use(express.static(path.join(__dirname,'public')));
 //app.use('/admin',adminRoutes);
