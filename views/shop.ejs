@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title><%=pageTitle %></title>
+	<link rel="stylesheet" type="text/css" href="/css/main.css">
+</head>
+<body>
+	<header class="main-header">
+		<nav class="main-header__nav">
+			<ul class="main-header__item-list">
+				<li class="main-header__item" class="active"><a href="/">Shop</a></li>
+				<li class="main-header__item"><a href="/admin/add-product">Add-Product</a></li>
+			</ul>
+		</nav>
+	</header>
+
+    <main>
+        <% if (prods.length>0) {%>
+            <% for (let product of prods) {%>
+                <div class="grid">
+                    <div class="card">
+                        <img src="https://thegraphicsfairy.com/wp-content/uploads/2013/03/book-Image-royalty-free-GraphicsFairy1.jpg" alt="" width="50%"/>
+                        <div class="title"> 
+                            <h1><%=product.title %></h1>
+                        </div>
+                    </div> 
+                </div>
+            <% } %>
+        <% } else { %>
+            <h1>No product found!</h1>
+        <% } %>
+    </main>
+    
+</body>
+</html>
