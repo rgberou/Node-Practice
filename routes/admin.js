@@ -5,14 +5,14 @@ const router=express.Router();
 const rootDir=require('../helper/path');
 
 
-const productController=('../controllers/product');
+const productController=require('../controllers/products');
 
 router.get('/add-product',productController.getAddProduct);
 
 router.post('/add-product',productController.postAddProduct);
 
 
-//module.exports=router;
+module.exports=router;
 
 /*exports.routes=router;
 exports.products=product;*/

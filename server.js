@@ -26,7 +26,7 @@ const shopRoutes=require('./routes/shop')
 //adding body parser
 app.use(bodyParser.urlencoded({extended:false}));app.use(express.static(path.join(__dirname,'public')));
 //app.use('/admin',adminRoutes);
-app.use('/admin',adminData.routes);
+app.use('/admin',adminData);
 app.use(shopRoutes);
 
 app.use((req,res,next)=>{

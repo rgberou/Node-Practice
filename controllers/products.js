@@ -15,3 +15,8 @@ exports.postAddProduct=(req,res,next)=>{
 	res.redirect('/');	
 }
 
+exports.getProducts=(req,res,next)=>{
+	//console.log(adminData.products)
+	res.render('shop',{prods:product,pageTitle:"Shop",path:"/",hasProducts: product.length>0,activeShop:true});
+	//res.sendFile(path.join(rootDir,'views','shop.html'));
+}
