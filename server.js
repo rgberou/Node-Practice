@@ -23,16 +23,15 @@ app.set('views','views');
 const adminData=require('./routes/admin');
 const shopRoutes=require('./routes/shop')
 
+
+const errorController=require('./controllers/error');
 //adding body parser
 app.use(bodyParser.urlencoded({extended:false}));app.use(express.static(path.join(__dirname,'public')));
 //app.use('/admin',adminRoutes);
 app.use('/admin',adminData);
 app.use(shopRoutes);
 
-app.use((req,res,next)=>{
-	//res.status(404).send('<h1>Page not found</h1>');
-	res.status(404).render('404',{pageTitle:"Page not found"});
-});
+app.use(errorController.getError);
 
 
 app.listen(30003)
