@@ -18,8 +18,19 @@ exports.postAddProduct=(req,res,next)=>{
 }
 
 exports.getProducts=(req,res,next)=>{
+
+	Product.fetchAll(product =>{
+		res.render('shop',{
+			prods:product,
+			pageTitle:"Shop",
+			path:"/",
+			hasProducts: product.length>0,
+			activeShop:true
+		});
+
+	});
 	//console.log(adminData.products)
-	const product=Product.fetchAll();
-	res.render('shop',{prods:product,pageTitle:"Shop",path:"/",hasProducts: product.length>0,activeShop:true});
+	//const product=Product.fetchAll();
+	//res.render('shop',{prods:product,pageTitle:"Shop",path:"/",hasProducts: product.length>0,activeShop:true});
 	//res.sendFile(path.join(rootDir,'views','shop.html'));
 }
